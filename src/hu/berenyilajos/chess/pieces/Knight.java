@@ -43,4 +43,9 @@ public class Knight extends Piece {
         }
         return legalMoves;
     }
+
+    @Override
+    public int locationBonus() {
+        return this.alliance.pawnBonus(position);
+    }
 }

@@ -119,4 +119,9 @@ public class Pawn extends Piece {
         }
         return legalMoves;
     }
+
+    @Override
+    public int locationBonus() {
+        return this.alliance.pawnBonus(position);
+    }
 }

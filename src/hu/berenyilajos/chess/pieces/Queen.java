@@ -44,4 +44,9 @@ public class Queen extends Piece {
         }
         return legalMoves;
     }
+
+    @Override
+    public int locationBonus() {
+        return this.alliance.queenBonus(position);
+    }
 }

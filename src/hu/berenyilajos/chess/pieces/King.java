@@ -54,6 +54,11 @@ public class King extends Piece {
         return legalMoves;
     }
 
+    @Override
+    public int locationBonus() {
+        return this.alliance.kingBonus(position);
+    }
+
     public boolean isCastled() {
         return isCastled;
     }

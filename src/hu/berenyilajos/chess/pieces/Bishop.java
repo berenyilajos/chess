@@ -45,4 +45,9 @@ public class Bishop extends Piece {
         }
         return legalMoves;
     }
+
+    @Override
+    public int locationBonus() {
+        return this.alliance.bishopBonus(position);
+    }
 }

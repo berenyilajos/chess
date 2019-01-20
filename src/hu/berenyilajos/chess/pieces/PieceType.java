@@ -7,8 +7,7 @@ public enum PieceType {
     BISHOP(350, "B"),
     KNIGHT(320, "N"),
     ROOK(500, "R"),
-    PAWN(100, "P"),
-    NONE(0, "-");
+    PAWN(100, "P");
 
     final int value;
     final String pieceName;

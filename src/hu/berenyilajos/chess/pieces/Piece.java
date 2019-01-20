@@ -53,7 +53,9 @@ public abstract class Piece {
 
     public abstract List<Move> calculateLegalMoves(final Board board);
 
-    protected static boolean isValidTileCoordinate(final int coordinate) {
+    public abstract int locationBonus();
+
+    public static boolean isValidTileCoordinate(final int coordinate) {
         return (coordinate & 0x88) == 0;
     }
 

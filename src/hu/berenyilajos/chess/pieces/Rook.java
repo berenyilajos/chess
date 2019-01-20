@@ -44,4 +44,9 @@ public class Rook extends Piece {
         }
         return legalMoves;
     }
+
+    @Override
+    public int locationBonus() {
+        return this.alliance.rookBonus(position);
+    }
 }
