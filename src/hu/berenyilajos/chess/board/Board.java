@@ -59,6 +59,10 @@ public class Board {
         return transitionMove;
     }
 
+    public Map<Integer, Piece> getBoardConfig() {
+        return boardConfig;
+    }
+
     public static Board createStandardBoard() {
         return STANDARD_BOARD;
     }

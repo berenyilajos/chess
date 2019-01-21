@@ -539,7 +539,6 @@ public final class Table extends Observable {
         final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
         gameBoards.remove(gameBoards.size() - 1);
         removeFromRepetaetedBordsIfNeeded(chessBoard);
-        updateActualRepeatedBoards();
         this.chessBoard = this.chessBoard.currentPlayer().unMakeMove(lastMove).getToBoard();
         changeInRepetitionBoardsIfNeeded(chessBoard);
         updateActualRepeatedBoards();
@@ -624,7 +623,6 @@ public final class Table extends Observable {
 
         @Override
         protected Move doInBackground() throws Exception {
-//            Table.get().updateActualRepeatedBoards();
             final Move bestMove;
             final Move bookMove = Table.get().getUseBook()
                     ? MySqlGamePersistence.get().getNextBestMove(Table.get().getGameBoard(),
@@ -666,7 +664,6 @@ public final class Table extends Observable {
                 Table.get().updateGameBoard(Table.get().getGameBoard().currentPlayer().makeMove(bestMove).getToBoard());
                 Table.get().gameBoards.add(Table.get().getGameBoard());
                 Table.get().addToRepetaetedBordsIfNeeded(Table.get().getGameBoard());
-                Table.get().updateActualRepeatedBoards();
                 Table.get().getMoveLog().addMove(bestMove);
                 Table.get().getGameHistoryPanel().redo(Table.get().getGameBoard(), Table.get().getMoveLog());
                 Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
@@ -832,7 +829,6 @@ public final class Table extends Observable {
                                 chessBoard = transition.getToBoard();
                                 gameBoards.add(chessBoard);
                                 addToRepetaetedBordsIfNeeded(chessBoard);
-//                                updateActualRepeatedBoards();
                                 moveLog.addMove(move);
                             }
                             sourceTile = null;
