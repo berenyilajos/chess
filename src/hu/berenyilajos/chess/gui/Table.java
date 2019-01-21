@@ -934,13 +934,15 @@ public final class Table extends Observable {
         private void assignTilePieceIcon(final Board board) {
             this.removeAll();
             if(board.getPiece(this.tileId) != null) {
+                String filePath = pieceIconPath +
+                        board.getPiece(this.tileId).getAlliance().toString().substring(0, 1) + "" +
+                        board.getPiece(this.tileId).toString().toUpperCase() +
+                        ".gif";
                 try{
-                    final BufferedImage image = ImageIO.read(new File(pieceIconPath +
-                            board.getPiece(this.tileId).getAlliance().toString().substring(0, 1) + "" +
-                            board.getPiece(this.tileId).toString() +
-                            ".gif"));
+                    final BufferedImage image = ImageIO.read(new File(filePath));
                     add(new JLabel(new ImageIcon(image)));
                 } catch(final IOException e) {
+                    System.err.println("filePath: " + filePath);
                     e.printStackTrace();
                 }
             }

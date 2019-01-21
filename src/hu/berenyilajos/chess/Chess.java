@@ -7,7 +7,7 @@ public class Chess {
 
     public static void main(String[] args) {
         Board board = Board.getStandardBoard();
-
+        System.out.println(board);
         Table.get().show();
     }
 
