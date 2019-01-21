@@ -936,7 +936,7 @@ public final class Table extends Observable {
             if(board.getPiece(this.tileId) != null) {
                 String filePath = pieceIconPath +
                         board.getPiece(this.tileId).getAlliance().toString().substring(0, 1) + "" +
-                        board.getPiece(this.tileId).toString().toUpperCase() +
+                        board.getPiece(this.tileId).getPieceType() +
                         ".gif";
                 try{
                     final BufferedImage image = ImageIO.read(new File(filePath));
