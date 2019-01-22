@@ -564,7 +564,7 @@ public final class Table extends Observable {
         List<Board> aktualRepeatedBoards = board.currentPlayer().getAlliance() == Alliance.WHITE ?
                 whiteAktualRepeatedBoards : blackAktualRepeatedBoards;
         for (Board b : aktualRepeatedBoards) {
-            if (BoardEvaluator.equalsForRepetition(b, board)) {
+            if (b != board && BoardEvaluator.equalsForRepetition(b, board)) {
                 return true;
             }
         }
@@ -646,7 +646,7 @@ public final class Table extends Observable {
 //                int numPieces = Table.get().getGameBoard().getWhitePieces().size() +
 //                        Table.get().getGameBoard().getBlackPieces().size();
 //                //int bonusDepth = Math.min(4, 1 + Math.round((float)32/numPieces));
-                int bonusDepth = pieceValues.get() <= 600 ? 4 : pieceValues.get() <= 3300 ? 2 : 0;
+                int bonusDepth = pieceValues.get() <= 600 ? 4 : pieceValues.get() <= 2700 ? 2 : 0;
                 final MoveStrategy strategy =
                         new StockAlphaBeta(Table.get().getGameSetup().getSearchDepth() + bonusDepth, Table.get().getDebugPanel(),
                                 Table.get().whiteAktualRepeatedBoards, Table.get().blackAktualRepeatedBoards);
@@ -955,7 +955,7 @@ public final class Table extends Observable {
 
     private void addToRepetaetedBordsIfNeeded(Board board) {
         for (Board b : gameBoards) {
-            if (BoardEvaluator.equalsForRepetition(b, board)) {
+            if (b != board && BoardEvaluator.equalsForRepetition(b, board)) {
                 if (!containsForRepetation(board)) {
                     repeatedBoards.add(board);
                 }
@@ -976,7 +976,7 @@ public final class Table extends Observable {
 
     private void changeInRepetitionBoardsIfNeeded(Board board) {
         for (int i = 0; i < repeatedBoards.size(); i++) {
-            if (BoardEvaluator.equalsForRepetition(board, repeatedBoards.get(i))) {
+            if (board != repeatedBoards.get(i) && BoardEvaluator.equalsForRepetition(board, repeatedBoards.get(i))) {
                 repeatedBoards.set(i, board);
                 break;
             }
@@ -985,7 +985,7 @@ public final class Table extends Observable {
 
     private boolean containsForRepetation(Board board) {
         for (Board b : repeatedBoards) {
-            if (b == board || BoardEvaluator.equalsForRepetition(b, board)) {
+            if (BoardEvaluator.equalsForRepetition(b, board)) {
                 return true;
             }
         }
@@ -1010,7 +1010,7 @@ public final class Table extends Observable {
     public boolean isEndGame() {
         return chessBoard.currentPlayer().isInCheckMate() ||
                chessBoard.currentPlayer().isInStaleMate() ||
-               BoardEvaluator.isRepeatedBoard(chessBoard, whiteAktualRepeatedBoards, blackAktualRepeatedBoards);
+               isRepeatedBoard(chessBoard);
     }
 }
 

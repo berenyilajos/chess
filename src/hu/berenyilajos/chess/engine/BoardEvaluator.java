@@ -25,7 +25,6 @@ public interface BoardEvaluator {
     }
 
     static boolean equalsForRepetition(Board b, Board board) {
-        if (board == b) return false;
         if (board.currentPlayer().getAlliance() != b.currentPlayer().getAlliance() ||
                 board.currentPlayer().getActivePieces().size() != b.currentPlayer().getActivePieces().size() ||
                 board.currentPlayer().getOpponent().getActivePieces().size() != b.currentPlayer().getOpponent().getActivePieces().size() ||
@@ -39,7 +38,7 @@ public interface BoardEvaluator {
         }
 
         for (Map.Entry<Integer, Piece> e : b.getBoardConfig().entrySet()) {
-            if (!e.getValue().equals(board.getBoardConfig().get(e.getKey()))) {
+            if (!equalsWithSamePosition(e.getValue(), board.getBoardConfig().get(e.getKey()))) {
                 return false;
             }
         }
@@ -47,12 +46,16 @@ public interface BoardEvaluator {
         return true;
     }
 
-    static boolean piecesEquals(Board b, Board board) {
-        return piecesEquals(b.getWhitePieces(), board.getWhitePieces()) &&
-                piecesEquals(b.getBlackPieces(), board.getBlackPieces());
+    static boolean equalsWithSamePosition(Piece p1, Piece p2) {
+        return p1 == p2 || (p2 != null && p1.getPieceType() == p2.getPieceType() && p1.getAlliance() == p2.getAlliance());
     }
 
-    static boolean piecesEquals(List<Piece> p1, List<Piece> p2) {
+    static boolean piecesEquals(Board b, Board board) {
+        return piecesEqualsWithSameAlliance(b.getWhitePieces(), board.getWhitePieces()) &&
+                piecesEqualsWithSameAlliance(b.getBlackPieces(), board.getBlackPieces());
+    }
+
+    static boolean piecesEqualsWithSameAlliance(List<Piece> p1, List<Piece> p2) {
         Map<PieceType, Integer> m = new HashMap<>(6);
         for (Piece p : p1) {
             if (m.get(p.getPieceType()) == null) {

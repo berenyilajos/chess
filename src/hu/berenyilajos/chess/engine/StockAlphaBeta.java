@@ -26,6 +26,7 @@ public class StockAlphaBeta extends Observable implements MoveStrategy {
     private final List<Board> whiteAktualRepeatedBoards;
     private final List<Board> blackAktualRepeatedBoards;
     private static final int MAX_QUIESCENCE = 5000*10;
+    private int score;
 
     private enum MoveSorter {
 
@@ -127,6 +128,7 @@ public class StockAlphaBeta extends Observable implements MoveStrategy {
                     highestSeenValue = currentValue;
                     bestMove = move;
                     if(moveTransition.getToBoard().blackPlayer().isInCheckMate()) {
+                        score = StandardBoardEvaluator.CHECK_MATE_BONUS;
                         break;
                     }
                 }
@@ -134,6 +136,7 @@ public class StockAlphaBeta extends Observable implements MoveStrategy {
                     lowestSeenValue = currentValue;
                     bestMove = move;
                     if(moveTransition.getToBoard().whitePlayer().isInCheckMate()) {
+                        score = -StandardBoardEvaluator.CHECK_MATE_BONUS;
                         break;
                     }
                 }
@@ -153,22 +156,27 @@ public class StockAlphaBeta extends Observable implements MoveStrategy {
 
         this.executionTime = System.currentTimeMillis() - startTime;
         final String result = board.currentPlayer() + " SELECTS " +bestMove+ " [#boards evaluated = " +this.boardsEvaluated+
-                " time taken = " +this.executionTime/1000+ " rate = " +(1000 * ((double)this.boardsEvaluated/this.executionTime));
-        System.out.printf("%s SELECTS %s [#boards evaluated = %d, time taken = %d ms, rate = %.1f\n", board.currentPlayer(),
-                bestMove, this.boardsEvaluated, this.executionTime, (1000 * ((double)this.boardsEvaluated/this.executionTime)));
+                " time taken = " +this.executionTime+ " ms, score = " + score;
+        System.out.printf("%s SELECTS %s [#boards evaluated = %d, time taken = %d ms, rate = %.1f, score: %d\n", board.currentPlayer(),
+                bestMove, this.boardsEvaluated, this.executionTime, (1000 * ((double)this.boardsEvaluated/this.executionTime)), score);
         setChanged();
         notifyObservers(result);
         return bestMove;
     }
 
-    private static String score(final Player currentPlayer,
+    private String score(final Player currentPlayer,
                                 final int highestSeenValue,
                                 final int lowestSeenValue) {
-
         if(currentPlayer.isWhite()) {
-            return "[score: " +highestSeenValue + "]";
+            score = highestSeenValue > StandardBoardEvaluator.CHECK_MATE_BONUS - 1 ? highestSeenValue - searchDepth + 1 :
+                    highestSeenValue < -StandardBoardEvaluator.CHECK_MATE_BONUS + 1 ? highestSeenValue + searchDepth - 1 :
+                            highestSeenValue;
+            return "[score: " +score + "]";
         } else if(currentPlayer.isBlack()) {
-            return "[score: " +lowestSeenValue+ "]";
+            score = lowestSeenValue < -StandardBoardEvaluator.CHECK_MATE_BONUS + 1 ? lowestSeenValue + searchDepth - 1 :
+                    lowestSeenValue > StandardBoardEvaluator.CHECK_MATE_BONUS - 1 ? lowestSeenValue - searchDepth + 1 :
+                            lowestSeenValue;
+            return "[score: " +score+ "]";
         }
         throw new RuntimeException("bad bad boy!");
     }
