@@ -596,6 +596,12 @@ public final class Table extends Observable {
             Table.get().updateActualRepeatedBoards();
 
             if (Table.get().getGameSetup().isAIPlayer(Table.get().getGameBoard().currentPlayer())) {
+                if (Table.get().isRepeatedBoard(Table.get().getGameBoard())) {
+                    JOptionPane.showMessageDialog(Table.get().getBoardPanel(),
+                            "Game Over: draw by three fold repetition!", "Game Over",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
                 System.out.println(Table.get().getGameBoard().currentPlayer() + " is set to AI, thinking....");
                 final AIThinkTank thinkTank = new AIThinkTank();
                 thinkTank.execute();
