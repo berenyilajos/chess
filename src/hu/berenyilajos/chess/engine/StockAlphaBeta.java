@@ -243,20 +243,27 @@ public class StockAlphaBeta extends Observable implements MoveStrategy {
 
     private int calculateQuiescenceDepth(final MoveTransition moveTransition,
                                          final int depth) {
-        if(depth == 1 && this.quiescenceCount < MAX_QUIESCENCE) {
+//        if(depth == 1 && this.quiescenceCount < MAX_QUIESCENCE) {
+        if(depth == 1) {
             int activityMeasure = 0;
             if (moveTransition.getToBoard().currentPlayer().isInCheck()) {
-                activityMeasure += 1;
-            }
-            for(final Move move: BoardUtils.lastNMoves(moveTransition.getToBoard(), 2)) {
-                if(move.isAttack()) {
-                    activityMeasure += 1;
-                }
-            }
-            if(activityMeasure >= 2) {
-                this.quiescenceCount++;
+//                activityMeasure += 1;
                 return 1;
             }
+            Move currentMove = moveTransition.getToBoard().getTransitionMove();
+            if ((currentMove != Move.MoveFactory.getNullMove() && currentMove.isAttack())) {
+                return 1;
+            }
+            return 0;
+//            for(final Move move: BoardUtils.lastNMoves(moveTransition.getToBoard(), 2)) {
+//                if(move.isAttack()) {
+//                    activityMeasure += 1;
+//                }
+//            }
+//            if(activityMeasure >= 2) {
+//                this.quiescenceCount++;
+//                return 1;
+//            }
         }
         return depth - 1;
     }
